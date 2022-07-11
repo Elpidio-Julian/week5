@@ -18,9 +18,10 @@ function parseText(text) {
     }
     return text
 }
+let parsedText = parseText(text);
 console.log(parseText(text))
 
-// function generateWordPairs(text) {
+// function generateWordPairs(text) { // some code for this function that had some logic bugs
 //     let wordPairs = {}
 //     for (i = 0; i < text.length - 1; i++) {
 //         if (text[i] === text[i+1]) {
@@ -44,25 +45,38 @@ console.log(parseText(text))
 //     return wordPairs
 // }
 
+// function generateWordPairs(text) {
+//     let wordPairs = {}
+//     let storedKey = ''
+//     for (i = 0; i < text.length - 1; i++) { // iterate through all words
+//         storedKey = text[i]
+//         if(wordPairs[storedKey] === undefined){ // check if array has been made yet for the current key
+//            wordPairs[storedKey] = [];
+        
+//             for (b = i + 1; b < text.length - (i + 1); b++) { // iterate through following words
+//                 if (storedKey === text[b]) { // check for value equality
+//                     wordPairs[storedKey].push(text[b])
+//                 }
+//             } 
+//         }
+//         if(text[i + 1] !== storedKey){ // create unique word pairs
+//             wordPairs[storedKey].push(text[i + 1]) 
+//         }
+//         }
+//     return wordPairs // return object
+// } // for the instructors see my pain
+
 function generateWordPairs(text) {
     let wordPairs = {}
     let storedKey = ''
     for (i = 0; i < text.length - 1; i++) { // iterate through all words
         storedKey = text[i]
-        if(wordPairs[storedKey] === undefined){
+        if(wordPairs[storedKey] === undefined){ // check if array has been made yet for the current key
            wordPairs[storedKey] = [];
-        
-            for (b = i + 1; b < text.length - (i + 1); b++) { // iterate through following words
-                if (storedKey === text[b]) { // check for value equality
-                    wordPairs[storedKey].push(text[b])
-                }
-            } 
         }
-        if(text[i + 1] !== storedKey){
-            wordPairs[storedKey].push(text[i + 1]) 
+        wordPairs[storedKey].push(text[i + 1])
         }
-        }
-    return wordPairs
+    return wordPairs // return object
 }
 
 
@@ -74,3 +88,34 @@ function generateWordPairs(text) {
 
 let wordPairs = generateWordPairs(parseText(text))
 console.log(wordPairs)
+
+function writeLine(markovChain, words) {
+    let writtenLine = '';
+    let keys = Object.keys(markovChain)
+    for (let i = 0; i <= words; i++) {
+        let keyNum = numGen(keys.length - 1)
+        if(markovChain[keys[keyNum]].length === 0){
+            writtenLine += keys[keyNum] + ' ';
+            continue
+        }
+        let markovWord = numGen(markovChain[keys[keyNum]].length);
+        writtenLine += keys[keyNum] + ' ' + markovChain[keys[keyNum]][markovWord] + ' ';
+
+    }
+    return writtenLine
+    function numGen(max){
+        return Math.floor(Math.random() * max);
+    }
+}
+
+
+
+
+function generatePoem(wordCorpus, lines, words) {
+    let wordPairs = generateWordPairs(parseText(wordCorpus))
+    for(i = 0; i < lines; i++) {
+        console.log(writeLine(wordPairs, words / 2))
+    }
+}
+
+generatePoem(text, 7, 8)
